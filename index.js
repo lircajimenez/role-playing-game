@@ -15,7 +15,7 @@ const monster = {
 };
 
 function getDiceRollArray(diceCount) {
-  return new Array(diceCount).fill(0).map((num) => {
+  return new Array(diceCount).fill(0).map(() => {
     return Math.floor(Math.random() * 6) + 1;
   });
 }
@@ -28,19 +28,29 @@ function getDiceHTML(diceCount) {
     .join("");
 }
 
-function renderCharacter(data) {
-  const { elementID, name, avatar, health, diceCount } = data;
-  const diceHTML = getDiceHTML(diceCount);
+//constructor function that will be the template for Characters
+function Character(data) {
+  this.elementID = data.elementID;
+  this.name = data.name;
+  this.avatar = data.avatar;
+  this.health = data.health;
+  this.diceCount = data.diceCount;
+  this.getCharacterHTML = function () {
+    const { elementID, name, avatar, health, diceCount } = this;
+    const diceHTML = getDiceHTML(diceCount);
 
-  document.getElementById(elementID).innerHTML = `
-        <div class="character-card">
-        <h4 class="name">${name}</h4>
-        <img class="avatar" src="${avatar}" />
-        <p class="health">health: <b> ${health} </b></p>
-        <div class="dice-container">${diceHTML}</div>
-        </div>
-    `;
+    document.getElementById(elementID).innerHTML = `
+              <div class="character-card">
+              <h4 class="name">${name}</h4>
+              <img class="avatar" src="${avatar}" />
+              <p class="health">health: <b> ${health} </b></p>
+              <div class="dice-container">${diceHTML}</div>
+              </div>
+          `;
+  };
 }
 
-renderCharacter(hero);
-renderCharacter(monster);
+const wizard = new Character(hero);
+const orc = new Character(monster);
+wizard.getCharacterHTML();
+orc.getCharacterHTML();
