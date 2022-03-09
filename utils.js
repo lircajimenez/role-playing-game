@@ -4,4 +4,12 @@ function getDiceRollArray(diceCount) {
   });
 }
 
-export { getDiceRollArray };
+function getDicePlaceholderHTML(diceCount) {
+  return new Array(diceCount).fill(0).map(() => {
+    return `<div class="placeholder-dice"></div>`;
+  });
+}
+
+console.log(getDicePlaceholderHTML(3));
+
+export { getDiceRollArray, getDicePlaceholderHTML };
