@@ -5,11 +5,12 @@ function getDiceRollArray(diceCount) {
 }
 
 function getDicePlaceholderHTML(diceCount) {
-  return new Array(diceCount).fill(0).map(() => {
-    return `<div class="placeholder-dice"></div>`;
-  });
+  return new Array(diceCount)
+    .fill(0)
+    .map(() => {
+      return `<div class="placeholder-dice"></div>`;
+    })
+    .join("");
 }
-
-console.log(getDicePlaceholderHTML(3));
 
 export { getDiceRollArray, getDicePlaceholderHTML };
