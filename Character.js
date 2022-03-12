@@ -8,12 +8,23 @@ function Character(data) {
   this.diceArray = getDicePlaceholderHTML(this.diceCount);
 
   this.getDiceHTML = function () {
-    this.currentDiceCount = getDiceRollArray(this.diceCount);
-    this.diceArray = this.currentDiceCount
+    this.currentDiceScore = getDiceRollArray(this.diceCount);
+    this.diceArray = this.currentDiceScore
       .map((num) => {
         return `<div class="dice">${num}</div>`;
       })
       .join("");
+  };
+
+  this.takeDamage = function (attackScoreArray) {
+    const totalAttackScore = attackScoreArray.reduce(
+      (total, current) => total + current
+    );
+    this.health -= totalAttackScore;
+    if (this.health <= 0) {
+      this.dead = true;
+      this.health = 0;
+    }
   };
 
   this.getCharacterHTML = function () {
