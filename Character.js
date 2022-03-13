@@ -10,11 +10,11 @@ function Character(data) {
   this.maxHealth = this.health;
 
   //using this cause it's being pulled from data
-  this.diceArray = getDicePlaceholderHTML(this.diceCount);
+  this.diceHTML = getDicePlaceholderHTML(this.diceCount);
 
-  this.getDiceHTML = function () {
+  this.setDiceHTML = function () {
     this.currentDiceScore = getDiceRollArray(this.diceCount);
-    this.diceArray = this.currentDiceScore
+    this.diceHTML = this.currentDiceScore
       .map((num) => `<div class="dice">${num}</div>`)
       .join("");
   };
@@ -43,7 +43,7 @@ function Character(data) {
   };
 
   this.getCharacterHTML = function () {
-    const { name, avatar, health, diceArray } = this;
+    const { name, avatar, health, diceHTML } = this;
     const healthBar = this.getHealthBarHTML();
 
     return `
@@ -52,7 +52,7 @@ function Character(data) {
         <img class="avatar" src="${avatar}" />
         <div class="health">health: <b> ${health} </b></div>
         ${healthBar}
-        <div class="dice-container">${diceArray}</div>
+        <div class="dice-container">${diceHTML}</div>
       </div>
     `;
   };
