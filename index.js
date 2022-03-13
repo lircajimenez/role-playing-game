@@ -1,25 +1,36 @@
 import characterData from "./data.js";
 import Character from "./Character.js";
 
-const wizard = new Character(characterData.hero);
-const orc = new Character(characterData.monster);
+let monstersArray = ["orc", "demon", "goblin"];
+
+function getNewMonster() {
+  const nextMonsterData = characterData[monstersArray.shift()];
+
+  return nextMonsterData ? new Character(nextMonsterData) : {};
+}
 
 function attack() {
   wizard.getDiceHTML();
-  orc.getDiceHTML();
-  wizard.takeDamage(orc.currentDiceScore);
-  orc.takeDamage(wizard.currentDiceScore);
+  monster.getDiceHTML();
+  wizard.takeDamage(monster.currentDiceScore);
+  monster.takeDamage(wizard.currentDiceScore);
   render();
-  //can also be if(wizard.dead || orc.dead)
-  //truthy values, if it's false *.dead is undefined
-  if (wizard.dead === true || orc.dead === true) {
+
+  if (wizard.dead) {
     endGame();
+  } else if (monster.dead) {
+    if (monstersArray.length > 0) {
+      monster = getNewMonster();
+      render();
+    } else {
+      endGame();
+    }
   }
 }
 
 function endGame() {
   const endMessage =
-    wizard.health === 0 && orc.health === 0
+    wizard.health === 0 && monster.health === 0
       ? "No victors - all creatures are dead"
       : wizard.health > 0
       ? "The Wizard Wins"
@@ -28,19 +39,22 @@ function endGame() {
   const endEmoji = wizard.health > 0 ? "🔮" : "☠️";
 
   document.body.innerHTML = `
-    <div class="end-game">
-        <h2>Game Over</h2>
-        <h3>${endMessage}</h3>
-        <p class="end-emoji">${endEmoji}</p>
-    </div>
-    `;
+  <div class="end-game">
+  <h2>Game Over</h2>
+  <h3>${endMessage}</h3>
+  <p class="end-emoji">${endEmoji}</p>
+  </div>
+  `;
 }
+
+document.getElementById("attack-button").addEventListener("click", attack);
 
 function render() {
   document.getElementById("hero").innerHTML = wizard.getCharacterHTML();
-  document.getElementById("monster").innerHTML = orc.getCharacterHTML();
+  document.getElementById("monster").innerHTML = monster.getCharacterHTML();
 }
 
-render();
+const wizard = new Character(characterData.hero);
+let monster = getNewMonster();
 
-document.getElementById("attack-button").addEventListener("click", attack);
+render();
